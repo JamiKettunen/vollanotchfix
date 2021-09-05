@@ -44,6 +44,7 @@ fi
 if ! hash patch 2>/dev/null; then
 	echo ">> System utility 'patch' not found, starting installation..."
 	mount | grep -q ' / .*ro' && sudo mount -o remount,rw /
+	sudo apt-get update
 	sudo apt install -y patch
 fi
 
