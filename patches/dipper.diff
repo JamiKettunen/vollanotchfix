@@ -1,0 +1,53 @@
+diff --color -ru a/usr/share/unity8/Panel/Panel.qml b/usr/share/unity8/Panel/Panel.qml
+--- a/usr/share/unity8/Panel/Panel.qml	2021-01-14 18:25:16.111002000 +0200
++++ b/usr/share/unity8/Panel/Panel.qml	2021-01-18 01:02:19.474405133 +0200
+@@ -333,7 +333,8 @@
+             id: panelTitleHolder
+             anchors {
+                 left: parent.left
+-                leftMargin: units.gu(1)
++                // HAX: extra margin for left side of curved screen corners
++                leftMargin: units.gu(1.8)
+                 right: __indicators.left
+                 rightMargin: units.gu(1)
+             }
+diff --color -ru a/usr/share/unity8/Panel/PanelBar.qml b/usr/share/unity8/Panel/PanelBar.qml
+--- a/usr/share/unity8/Panel/PanelBar.qml	2021-01-14 18:25:16.111002000 +0200
++++ b/usr/share/unity8/Panel/PanelBar.qml	2021-01-18 01:03:08.354367701 +0200
+@@ -194,6 +194,9 @@
+             rotation: root.alignment != Qt.AlignRight ? 0 : 180
+ 
+             anchors.fill: parent
++            // HAX: offset items to match expanded panel mode while oriented upright
++            // FIXME: make it possible to scroll using the empty space above
++            anchors.topMargin: (expanded && shell.orientationAngle == 0) ? 80 : 0
+             contentWidth: row.width
+             contentX: d.combinedOffset
+             interactive: false
+diff --color -ru a/usr/share/unity8/Panel/PanelMenu.qml b/usr/share/unity8/Panel/PanelMenu.qml
+--- a/usr/share/unity8/Panel/PanelMenu.qml	2021-01-14 18:25:16.111002000 +0200
++++ b/usr/share/unity8/Panel/PanelMenu.qml	2021-01-18 01:03:28.394353418 +0200
+@@ -178,6 +178,8 @@
+         anchors {
+             left: parent.left
+             right: parent.right
++            // HAX: extra margin for right side of curved screen corners
++            rightMargin: expanded ? 0 : units.gu(1.8)
+         }
+         expanded: false
+         enableLateralChanges: false
+diff --color -ru a/usr/share/unity8/Shell.qml b/usr/share/unity8/Shell.qml
+--- a/usr/share/unity8/Shell.qml	2021-01-14 18:25:16.111002000 +0200
++++ b/usr/share/unity8/Shell.qml	2021-01-18 01:04:10.604325216 +0200
+@@ -519,8 +519,9 @@
+             anchors.fill: parent //because this draws indicator menus
+ 
+             mode: shell.usageScenario == "desktop" ? "windowed" : "staged"
+-            minimizedPanelHeight: units.gu(3)
+-            expandedPanelHeight: units.gu(7)
++            //HAX: match panel height with notch & add extra space for it in expanded mode
++            minimizedPanelHeight: units.gu(4.2)
++            expandedPanelHeight: units.gu(7) + (shell.orientationAngle == 0 ? minimizedPanelHeight : 0)
+             applicationMenuContentX: launcher.lockedVisible ? launcher.panelWidth : 0
+ 
+             indicators {

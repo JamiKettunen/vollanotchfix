@@ -28,7 +28,7 @@ echo ">> Using diff '$DIFF'"
 if [ ! -e $DIFF ]; then
 	mkdir -p $WORK
 	echo ">> Fetching patches for $DEVICE..."
-	if ! wget -O $DIFF https://raw.githubusercontent.com/JamiKettunen/unity8-notch-hax/main/patches/$DEVICE.diff; then
+	if ! wget -O $DIFF https://raw.githubusercontent.com/ubports-dipper/unity8-notch-hax/main/patches/$DEVICE.diff; then
 		echo "ERROR: It seems your device isn't supported by this project;
        please tune the files on your device manually first,
        then fork the repo, create a patches/$DEVICE.diff
